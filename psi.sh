@@ -1,5 +1,6 @@
 #!/bin/bash
 ###### psi script by zhongfu ######
+set -x
 #### load config
 . etc/config.sh
 
@@ -143,7 +144,7 @@ cat << EOF > /var/www/psi/index.html
 		<a href="mailto:me@znx.cc">Contact</a>
 		<hr>
 		<p2>Past readings:</p2>
-$(cat pasthtml)
+$(cat etc/pasthtml)
 	</center>
 	<script>
 		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
@@ -157,9 +158,9 @@ echo html done
 ## make pasthtml
 currentdate=$(date +%d/%m/%Y\ %H:00)
 if [[ $(grep "$currentdate" pasthtml) == $null ]]; then
-	cat << EOF > pasthtml
+	cat << EOF > etc/pasthtml
 		<p><h2>$psi</h2>at $currentdate</p><br>
-$(head -n 9 pasthtml)
+$(head -n 9 etc/pasthtml)
 EOF
 	echo pasthtml done
 fi
