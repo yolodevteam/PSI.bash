@@ -197,33 +197,38 @@ echo json done
 
 #### pm2.5 concentration
 function getinfo {
-	northPSI=$(cat /tmp/swag | grep -A19 'North' | grep '[0-9]' | tr -s '\r\n' ' ' | awk '{print $1}')
-	northPM=$(cat /tmp/swag | grep -A19 'North' | grep '[0-9]' | tr -s '\r\n' ' ' | awk '{print $2}')
+	northPSI=( $(cat /tmp/swag | grep North | head -n 2 | sed -e "s|North||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
+	northPM=( $(cat /tmp/swag | grep North | tail -n 2 | sed -e "s|North||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
 
-	southPSI=$(cat /tmp/swag | grep -A19 'South' | grep '[0-9]' | tr -s '\r\n' ' ' | awk '{print $1}')
-	southPM=$(cat /tmp/swag | grep -A19 'South' | grep '[0-9]' | tr -s '\r\n' ' ' | awk '{print $2}')
+	southPSI=( $(cat /tmp/swag | grep South | head -n 2 | sed -e "s|South||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
+	southPM=( $(cat /tmp/swag | grep South | tail -n 2 | sed -e "s|South||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
 
-	eastPSI=$(cat /tmp/swag | grep -A19 'East' | grep '[0-9]' | tr -s '\r\n' ' ' | awk '{print $1}')
-	eastPM=$(cat /tmp/swag | grep -A19 'East' | grep '[0-9]' | tr -s '\r\n' ' ' | awk '{print $2}')
+	eastPSI=( $(cat /tmp/swag | grep East | head -n 2 | sed -e "s|East||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
+	eastPM=( $(cat /tmp/swag | grep East | tail -n 2 | sed -e "s|East||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
 
-	westPSI=$(cat /tmp/swag | grep -A19 'West' | grep '[0-9]' | tr -s '\r\n' ' ' | awk '{print $1}')
-	westPM=$(cat /tmp/swag | grep -A19 'West' | grep '[0-9]' | tr -s '\r\n' ' ' | awk '{print $2}')
+	westPSI=( $(cat /tmp/swag | grep West | head -n 2 | sed -e "s|West||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
+	westPM=( $(cat /tmp/swag | grep West | tail -n 2 | sed -e "s|West||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
 
-	centralPSI=$(cat /tmp/swag | grep -A19 'Central' | grep '[0-9]' | tr -s '\r\n' ' ' | awk '{print $1}')
-	centralPM=$(cat /tmp/swag | grep -A19 'Central' | grep '[0-9]' | tr -s '\r\n' ' ' | awk '{print $2}')
+	centralPSI=( $(cat /tmp/swag | grep Central | head -n 2 | sed -e "s|Central||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
+	centralPM=( $(cat /tmp/swag | grep Central | tail -n 2 | sed -e "s|Central||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
 }
-time=$(date +%H00)
-curl "http://app2.nea.gov.sg/anti-pollution-radiation-protection/air-pollution/psi/psi-readings-over-the-last-24-hours/time/$time" | tr '<>' '\n' > /tmp/swag
-if [[ $(cat /tmp/swag | grep moved) ]] || [[ $(cat /tmp/swag | grep "$(date +%d\ %h)") == $null ]]; then
+curl -s http://app2.nea.gov.sg/anti-pollution-radiation-protection/air-pollution/psi/psi-readings-over-the-last-24-hours | w3m -dump -T 'text/html' | grep -E "North  |South  |East  |West  |Central  |Overall  " > /tmp/swag
+getinfo
+if [[ ${northPSI[$(date +%-k)]} == 0 ]]; then
 	swag=no
 else
-	getinfo
+	swag=yes
+fi
+if [[ $(date +%-k) == 0 ]] && [[ ${northPSI[23]} != 0 ]]; then
+	swag=no
+else
 	swag=yes
 fi
 while [[ $swag == no ]]; do
 	sleep 30
-	curl "http://app2.nea.gov.sg/anti-pollution-radiation-protection/air-pollution/psi/psi-readings-over-the-last-24-hours/time/$time" | tr '<>' '\n' > /tmp/swag
-	if [[ $(cat /tmp/swag | grep moved) == $null ]] || [[ $(cat /tmp/swag | grep "$(date +%d\ %h)") ]]; then
+	curl -s http://app2.nea.gov.sg/anti-pollution-radiation-protection/air-pollution/psi/psi-readings-over-the-last-24-hours | w3m -dump -T 'text/html' | grep -E "North  |South  |East  |West  |Central  |Overall  " > /tmp/swag
+	getinfo
+	if [[ ${northPSI[$(date +%-k)]} != 0 ]]; then
 		getinfo
 		swag=yes
 	fi
