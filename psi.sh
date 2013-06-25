@@ -86,7 +86,7 @@ cat << EOF > /var/www/psi/index.html
         <link rel="apple-touch-icon" sizes="114x114" href="/assets/img/psi/apple-touch-icon-114.png">
         <link rel="apple-touch-icon" sizes="72x72" href="/assets/img/psi/apple-touch-icon-72.png">
         <link rel="apple-touch-icon" href="/assets/img/psi/apple-touch-icon-57.png">
-        <link rel="icon" type="image/png" href="/assets/img/psi/favicon.png">
+	<link rel="shortcut icon" href="/assets/img/psi/favicon.ico" type="image/x-icon">
 	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
         <style>
         h1 {
@@ -237,19 +237,30 @@ rm /tmp/swag
 . bin/xml.sh
 echo gdocs pm25 done
 areapm25=($northPM $southPM $eastPM $westPM $centralPM)
-max=${areapm25[0]}
-min=${areapm25[0]}
+pmmax=${areapm25[0]}
+pmmin=${areapm25[0]}
 for i in "${areapm25[@]}"; do
-    if [[ "$i" -gt "$max" ]]; then
-        max="$i"
+    if [[ "$i" -gt "$pmmax" ]]; then
+        pmmax="$i"
     fi
-    if [[ "$i" -lt "$min" ]]; then
-        min="$i"
+    if [[ "$i" -lt "$pmmin" ]]; then
+        pmmin="$i"
+    fi
+done
+areapsi=($northPSI $southPSI $eastPSI $westPSI $centralPSI)
+psimax=${areapsi[0]}
+psimin=${areapsi[0]}
+for i in "${areapsi[@]}"; do
+    if [[ "$i" -gt "$psimax" ]]; then
+        psimax="$i"
+    fi
+    if [[ "$i" -lt "$psimin" ]]; then
+        psimin="$i"
     fi
 done
 cat << EOF > /var/www/psi/all.json
 {
 $(cat /var/www/psi/all.json | tail -n 24 | sed '$ d'),
-	"$(date +%d:%m:%H)": { "psi": { "3hr":$psi, "north":$northPSI, "south":$southPSI, "east":$eastPSI, "west":$westPSI, "central":$centralPSI }, "pm25": { "min":$min, "max":$max, "north":$northPM, "south":$southPM, "east":$eastPM, "west":$westPM, "central":$centralPM } }
+	"$(date +%d:%m:%H)": { "psi": { "3hr":$psi, "min":$psimin, "max":$psimax, "north":$northPSI, "south":$southPSI, "east":$eastPSI, "west":$westPSI, "central":$centralPSI }, "pm25": { "min":$pmmin, "max":$pmmax, "north":$northPM, "south":$southPM, "east":$eastPM, "west":$westPM, "central":$centralPM } }
 }
 EOF
