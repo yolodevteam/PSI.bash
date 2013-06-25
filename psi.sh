@@ -32,7 +32,7 @@ while [[ $psi == 0 ]] || [[ $psi == $null ]] || [[ $psi23 != 0 ]]; do
 	sleep 30
 	psia=( $(curl -s http://app2.nea.gov.sg/anti-pollution-radiation-protection/air-pollution/psi/psi-readings-over-the-last-24-hours | w3m -dump -T 'text/html' | grep '3-hr PSI  ' | sed "s|3-hr PSI  ||g" | tr "\n" " " | tr -s " " " " | sed "s|-|0|g") )
 	if [[ $(date +%k) == " 0" ]]; then
-		psi23=${psi[23]}
+		psi23=${psia[23]}
 	fi
 	psi=${psia[$(date +%k)]}
 	if [[ $[ $(date +%k) + 2 ] != $column1 ]]; then
