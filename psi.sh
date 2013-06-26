@@ -263,9 +263,13 @@ for i in "${areapsi[@]}"; do
         psimin="$i"
     fi
 done
+if [[ $(grep "$(date +%d:%m:%H)" /var/www/psi/all.json) ]]; then
 cat << EOF > /var/www/psi/all.json
 {
 $(cat /var/www/psi/all.json | tail -n 24 | sed '$ d'),
 	"$(date +%d:%m:%H)": { "psi": { "3hr":$psi, "min":$psimin, "max":$psimax, "north":$northPSI, "south":$southPSI, "east":$eastPSI, "west":$westPSI, "central":$centralPSI }, "pm25": { "min":$pmmin, "max":$pmmax, "north":$northPM, "south":$southPM, "east":$eastPM, "west":$westPM, "central":$centralPM } }
 }
 EOF
+else
+	exit 0
+fi
