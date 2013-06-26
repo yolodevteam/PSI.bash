@@ -226,7 +226,7 @@ if [[ $northPSI == 0 ]]; then
 else
 	swag=yes
 fi
-if [[ $(date +%-k) == 0 ]] && [[ ${northPSIa[23]} != 0 ]]; then
+if [[ $(date +%-k) == 0 ]] & [[ ${northPSIa[23]} != 0 ]]; then
 	swag=no
 else
 	swag=yes
@@ -236,10 +236,9 @@ while [[ $swag == no ]]; do
 	curl -s http://app2.nea.gov.sg/anti-pollution-radiation-protection/air-pollution/psi/psi-readings-over-the-last-24-hours | w3m -dump -T 'text/html' | grep -E "North  |South  |East  |West  |Central  |Overall  " > /tmp/swag
 	getinfo
 	if [[ $northPSI != 0 ]]; then
-		getinfo
 		swag=yes
 	fi
-	if [[ $[ $(date +%k) + 2 ] != $column1 ]]; then
+	if [[ $[ $(date +%-k) + 2 ] != $column1 ]]; then
                 echo timeout
                 exit 0
         fi
