@@ -157,7 +157,7 @@ EOF
 echo html done
 ## make pasthtml
 currentdate=$(date +%d/%m/%Y\ %H:00)
-if [[ $(grep "$currentdate" pasthtml) == $null ]]; then
+if [[ $(grep "$currentdate" etc/pasthtml) == $null ]]; then
 	cat << EOF > etc/pasthtml
 		<p><h2>$psi</h2>at $currentdate</p><br>
 $(head -n 9 etc/pasthtml)
