@@ -197,29 +197,36 @@ echo json done
 
 #### pm2.5 concentration
 function getinfo {
-	northPSI=( $(cat /tmp/swag | grep North | head -n 2 | sed -e "s|North||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
-	northPM=( $(cat /tmp/swag | grep North | tail -n 2 | sed -e "s|North||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
+	northPSIa=( $(cat /tmp/swag | grep North | head -n 2 | sed -e "s|North||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
+	northPMa=( $(cat /tmp/swag | grep North | tail -n 2 | sed -e "s|North||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
+	southPSIa=( $(cat /tmp/swag | grep South | head -n 2 | sed -e "s|South||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
+	southPMa=( $(cat /tmp/swag | grep South | tail -n 2 | sed -e "s|South||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
+	eastPSIa=( $(cat /tmp/swag | grep East | head -n 2 | sed -e "s|East||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
+	eastPMa=( $(cat /tmp/swag | grep East | tail -n 2 | sed -e "s|East||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
+	westPSIa=( $(cat /tmp/swag | grep West | head -n 2 | sed -e "s|West||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
+	westPMa=( $(cat /tmp/swag | grep West | tail -n 2 | sed -e "s|West||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
+	centralPSIa=( $(cat /tmp/swag | grep Central | head -n 2 | sed -e "s|Central||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
+	centralPMa=( $(cat /tmp/swag | grep Central | tail -n 2 | sed -e "s|Central||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
 
-	southPSI=( $(cat /tmp/swag | grep South | head -n 2 | sed -e "s|South||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
-	southPM=( $(cat /tmp/swag | grep South | tail -n 2 | sed -e "s|South||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
-
-	eastPSI=( $(cat /tmp/swag | grep East | head -n 2 | sed -e "s|East||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
-	eastPM=( $(cat /tmp/swag | grep East | tail -n 2 | sed -e "s|East||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
-
-	westPSI=( $(cat /tmp/swag | grep West | head -n 2 | sed -e "s|West||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
-	westPM=( $(cat /tmp/swag | grep West | tail -n 2 | sed -e "s|West||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
-
-	centralPSI=( $(cat /tmp/swag | grep Central | head -n 2 | sed -e "s|Central||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
-	centralPM=( $(cat /tmp/swag | grep Central | tail -n 2 | sed -e "s|Central||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
+	northPSI=${northPSIa[$(date +%-k)]}
+	northPM=${northPMa[$(date +%-k)]}
+	southPSI=${southPSIa[$(date +%-k)]}
+	southPM=${southPMa[$(date +%-k)]}
+	eastPSI=${eastPSIa[$(date +%-k)]}
+	eastPM=${eastPMa[$(date +%-k)]}
+	westPSI=${westPSIa[$(date +%-k)]}
+	westPM=${westPMa[$(date +%-k)]}
+	centralPSI=${centralPSIa[$(date +%-k)]}
+	centralPM=${centralPMa[$(date +%-k)]}
 }
 curl -s http://app2.nea.gov.sg/anti-pollution-radiation-protection/air-pollution/psi/psi-readings-over-the-last-24-hours | w3m -dump -T 'text/html' | grep -E "North  |South  |East  |West  |Central  |Overall  " > /tmp/swag
 getinfo
-if [[ ${northPSI[$(date +%-k)]} == 0 ]]; then
+if [[ ${northPSIa[$(date +%-k)]} == 0 ]]; then
 	swag=no
 else
 	swag=yes
 fi
-if [[ $(date +%-k) == 0 ]] && [[ ${northPSI[23]} != 0 ]]; then
+if [[ $(date +%-k) == 0 ]] && [[ ${northPSIa[23]} != 0 ]]; then
 	swag=no
 else
 	swag=yes
@@ -228,7 +235,7 @@ while [[ $swag == no ]]; do
 	sleep 30
 	curl -s http://app2.nea.gov.sg/anti-pollution-radiation-protection/air-pollution/psi/psi-readings-over-the-last-24-hours | w3m -dump -T 'text/html' | grep -E "North  |South  |East  |West  |Central  |Overall  " > /tmp/swag
 	getinfo
-	if [[ ${northPSI[$(date +%-k)]} != 0 ]]; then
+	if [[ ${northPSIa[$(date +%-k)]} != 0 ]]; then
 		getinfo
 		swag=yes
 	fi
@@ -264,12 +271,12 @@ for i in "${areapsi[@]}"; do
     fi
 done
 if [[ $(grep "$(date +%d:%m:%H)" /var/www/psi/all.json) ]]; then
+	exit 0
+else
 cat << EOF > /var/www/psi/all.json
 {
 $(cat /var/www/psi/all.json | tail -n 24 | sed '$ d'),
 	"$(date +%d:%m:%H)": { "psi": { "3hr":$psi, "min":$psimin, "max":$psimax, "north":$northPSI, "south":$southPSI, "east":$eastPSI, "west":$westPSI, "central":$centralPSI }, "pm25": { "min":$pmmin, "max":$pmmax, "north":$northPM, "south":$southPM, "east":$eastPM, "west":$westPM, "central":$centralPM } }
 }
 EOF
-else
-	exit 0
 fi
