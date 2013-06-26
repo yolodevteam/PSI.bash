@@ -221,7 +221,7 @@ function getinfo {
 }
 curl -s http://app2.nea.gov.sg/anti-pollution-radiation-protection/air-pollution/psi/psi-readings-over-the-last-24-hours | w3m -dump -T 'text/html' | grep -E "North  |South  |East  |West  |Central  |Overall  " > /tmp/swag
 getinfo
-if [[ ${northPSIa[$(date +%-k)]} == 0 ]]; then
+if [[ $northPSI == 0 ]]; then
 	swag=no
 else
 	swag=yes
@@ -235,7 +235,7 @@ while [[ $swag == no ]]; do
 	sleep 30
 	curl -s http://app2.nea.gov.sg/anti-pollution-radiation-protection/air-pollution/psi/psi-readings-over-the-last-24-hours | w3m -dump -T 'text/html' | grep -E "North  |South  |East  |West  |Central  |Overall  " > /tmp/swag
 	getinfo
-	if [[ ${northPSIa[$(date +%-k)]} != 0 ]]; then
+	if [[ $northPSI != 0 ]]; then
 		getinfo
 		swag=yes
 	fi
