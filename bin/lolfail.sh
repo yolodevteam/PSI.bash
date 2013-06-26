@@ -15,7 +15,7 @@ function getinfo {
 curl -s http://app2.nea.gov.sg/anti-pollution-radiation-protection/air-pollution/psi/psi-readings-over-the-last-24-hours | w3m -dump -T 'text/html' | grep -E "North  |South  |East  |West  |Central  |Overall  " > /tmp/swag
 getinfo
 psia=( $(curl -s http://app2.nea.gov.sg/anti-pollution-radiation-protection/air-pollution/psi/psi-readings-over-the-last-24-hours | w3m -dump -T 'text/html' | grep '3-hr PSI  ' | sed "s|3-hr PSI  ||g" | tr "\n" " " | tr -s " " " " | sed "s|-|0|g") )
-for i in {10..17}; do
+for i in {0..9}; do
 areapm25=(${northPMa[$i]} ${southPMa[$i]} ${eastPMa[$i]} ${westPMa[$i]} ${centralPMa[$i]})
 pmmax=${areapm25[0]}
 pmmin=${areapm25[0]}
@@ -38,5 +38,6 @@ for ii in "${areapsi[@]}"; do
         psimin="$ii"
     fi
 done
-	echo -e "\t\"26:06:$i\": { \"psi\": { \"3hr\":${psia[$i]}, \"min\":$psimin, \"max\":$psimax, \"north\":${northPSIa[$i]}, \"south\":${southPSIa[$i]}, \"east\":${eastPSIa[$i]}, \"west\":${westPSIa[$i]}, \"central\":${centralPSIa[$i]} }, \"pm25\": { \"min\":$pmmin, \"max\":$pmmax, \"north\":${northPMa[$i]}, \"south\":${southPMa[$i]}, \"east\":${eastPMa[$i]}, \"west\":${westPMa[$i]}, \"central\":${centralPMa[$i]} } },"
+#	echo -e "\t\"26:06:$i\": { \"psi\": { \"3hr\":${psia[$i]}, \"min\":$psimin, \"max\":$psimax, \"north\":${northPSIa[$i]}, \"south\":${southPSIa[$i]}, \"east\":${eastPSIa[$i]}, \"west\":${westPSIa[$i]}, \"central\":${centralPSIa[$i]} }, \"pm25\": { \"min\":$pmmin, \"max\":$pmmax, \"north\":${northPMa[$i]}, \"south\":${southPMa[$i]}, \"east\":${eastPMa[$i]}, \"west\":${westPMa[$i]}, \"central\":${centralPMa[$i]} } },"
+echo -e "${northPSIa[$i]}\t${northPMa[$i]}\t${southPSIa[$i]}\t${southPMa[$i]}\t${eastPSIa[$i]}\t${eastPMa[$i]}\t${westPSIa[$i]}\t${westPMa[$i]}\t${centralPSIa[$i]}\t${centralPMa[$i]}"
 done
