@@ -119,6 +119,7 @@ cat << EOF > /tmp/reqpm.xml
 </feed>
 EOF
 ## send xml
-curl -L --silent --request POST --header "Authorization: GoogleLogin auth=${token}" "https://spreadsheets.google.com/feeds/cells/0AivhrAwkYK9VdFhZZ041YlNBaWI5aEpxOWgzWFdhQ3c/oda/private/full/batch?v=3.0" --header "Content-Type: application/atom+xml" --header "If-Match: *" --data-binary "@/tmp/reqpm.xml"
+## removed --silent
+curl -L --request POST --header "Authorization: GoogleLogin auth=${token}" "https://spreadsheets.google.com/feeds/cells/0AivhrAwkYK9VdFhZZ041YlNBaWI5aEpxOWgzWFdhQ3c/oda/private/full/batch?v=3.0" --header "Content-Type: application/atom+xml" --header "If-Match: *" --data-binary "@/tmp/reqpm.xml"
 rm /tmp/reqpm.xml
 

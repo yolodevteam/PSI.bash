@@ -62,10 +62,12 @@ cat << EOF > /tmp/req2.xml
 </entry>
 EOF
 ## send xml
-curl -L --silent --request PUT --header "Authorization: GoogleLogin auth=${token}" "https://spreadsheets.google.com/feeds/cells/0AivhrAwkYK9VdFhZZ041YlNBaWI5aEpxOWgzWFdhQ3c/od6/private/full/R${row1}C${column1}?v=3.0" --header "Content-Type: application/atom+xml" --header "If-Match: *" --data-binary "@/tmp/req1.xml" > /dev/null
+## removed --silent for debugging
+curl -L --request PUT --header "Authorization: GoogleLogin auth=${token}" "https://spreadsheets.google.com/feeds/cells/0AivhrAwkYK9VdFhZZ041YlNBaWI5aEpxOWgzWFdhQ3c/od6/private/full/R${row1}C${column1}?v=3.0" --header "Content-Type: application/atom+xml" --header "If-Match: *" --data-binary "@/tmp/req1.xml"
 echo gdocs 1 done
-curl -L --silent --request PUT --header "Authorization: GoogleLogin auth=${token}" "https://spreadsheets.google.com/feeds/cells/0AivhrAwkYK9VdFhZZ041YlNBaWI5aEpxOWgzWFdhQ3c/oda/private/full/R${row2}C2?v=3.0" --header "Content-Type: application/atom+xml" --header "If-Match: *" --data-binary "@/tmp/req2.xml" > /dev/null
+curl -L --request PUT --header "Authorization: GoogleLogin auth=${token}" "https://spreadsheets.google.com/feeds/cells/0AivhrAwkYK9VdFhZZ041YlNBaWI5aEpxOWgzWFdhQ3c/oda/private/full/R${row2}C2?v=3.0" --header "Content-Type: application/atom+xml" --header "If-Match: *" --data-binary "@/tmp/req2.xml"
 echo gdocs 2 done
+## commented for debugging
 rm /tmp/req1.xml /tmp/req2.xml
 #### pushover
 for user in ${config_pushover_keys[@]}; do
