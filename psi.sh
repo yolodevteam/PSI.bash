@@ -5,7 +5,7 @@ set -x
 . etc/config.sh
 
 #### get PSI readings for the day into an array
-psia=( $(curl -s http://app2.nea.gov.sg/anti-pollution-radiation-protection/air-pollution/psi/psi-readings-over-the-last-24-hours | w3m -dump -T 'text/html' | grep '3-hr PSI  ' | sed "s|3-hr PSI  ||g" | tr "\n" " " | tr -s " " " " | sed "s|-|0|g") )
+psia=( $(curl -s http://www.haze.gov.sg/haze-update/past-24-hour-psi-reading.aspx | w3m -dump -T 'text/html' | grep '3-hr PSI  ' | sed "s|3-hr PSI  ||g" | tr "\n" " " | tr -s " " " " | sed "s|-|0|g") )
 
 #### get PSI for hour
 psi=${psia[$(date +%k)]}
@@ -30,7 +30,7 @@ fi
 ## check if PSI is updated/11pm's psi still not zero
 while [[ $psi == 0 ]] || [[ $psi == $null ]] || [[ $psi23 != 0 ]]; do
 	sleep 30
-	psia=( $(curl -s http://app2.nea.gov.sg/anti-pollution-radiation-protection/air-pollution/psi/psi-readings-over-the-last-24-hours | w3m -dump -T 'text/html' | grep '3-hr PSI  ' | sed "s|3-hr PSI  ||g" | tr "\n" " " | tr -s " " " " | sed "s|-|0|g") )
+	psia=( $(curl -s http://www.haze.gov.sg/haze-update/past-24-hour-psi-reading.aspx | w3m -dump -T 'text/html' | grep '3-hr PSI  ' | sed "s|3-hr PSI  ||g" | tr "\n" " " | tr -s " " " " | sed "s|-|0|g") )
 	if [[ $(date +%k) == " 0" ]]; then
 		psi23=${psia[23]}
 	fi
@@ -221,7 +221,7 @@ function getinfo {
 	centralPSI=${centralPSIa[$(date +%-k)]}
 	centralPM=${centralPMa[$(date +%-k)]}
 }
-curl -s http://app2.nea.gov.sg/anti-pollution-radiation-protection/air-pollution/psi/psi-readings-over-the-last-24-hours | w3m -dump -T 'text/html' | grep -E "North  |South  |East  |West  |Central  |Overall  " > /tmp/swag
+curl -s http://www.haze.gov.sg/haze-update/past-24-hour-psi-reading.aspx | w3m -dump -T 'text/html' | grep -E "North  |South  |East  |West  |Central  |Overall  " > /tmp/swag
 getinfo
 swag=yes
 null=
@@ -233,7 +233,7 @@ if [[ $(date +%-k) == 0 ]] && [[ ${northPSIa[23]} != 0 ]]; then
 fi
 while [[ $swag == no ]]; do
 	sleep 30
-	curl -s http://app2.nea.gov.sg/anti-pollution-radiation-protection/air-pollution/psi/psi-readings-over-the-last-24-hours | w3m -dump -T 'text/html' | grep -E "North  |South  |East  |West  |Central  |Overall  " > /tmp/swag
+	curl -s http://www.haze.gov.sg/haze-update/past-24-hour-psi-reading.aspx | w3m -dump -T 'text/html' | grep -E "North  |South  |East  |West  |Central  |Overall  " > /tmp/swag
 	getinfo
 	if [[ $northPSI == 0 ]] || [[ $northPSI == $null ]]; then
 		swag=no

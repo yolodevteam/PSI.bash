@@ -12,9 +12,9 @@ function getinfo {
 	centralPSIa=( $(cat /tmp/swag | grep Central | head -n 2 | sed -e "s|Central||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
 	centralPMa=( $(cat /tmp/swag | grep Central | tail -n 2 | sed -e "s|Central||g" -e "s|-|0|g"| tr "\n" " " | tr -s " " " ") )
 }
-curl -s http://app2.nea.gov.sg/anti-pollution-radiation-protection/air-pollution/psi/psi-readings-over-the-last-24-hours | w3m -dump -T 'text/html' | grep -E "North  |South  |East  |West  |Central  |Overall  " > /tmp/swag
+curl -s http://www.haze.gov.sg/haze-update/past-24-hour-psi-reading.aspx | w3m -dump -T 'text/html' | grep -E "North  |South  |East  |West  |Central  |Overall  " > /tmp/swag
 getinfo
-psia=( $(curl -s http://app2.nea.gov.sg/anti-pollution-radiation-protection/air-pollution/psi/psi-readings-over-the-last-24-hours | w3m -dump -T 'text/html' | grep '3-hr PSI  ' | sed "s|3-hr PSI  ||g" | tr "\n" " " | tr -s " " " " | sed "s|-|0|g") )
+psia=( $(curl -s http://www.haze.gov.sg/haze-update/past-24-hour-psi-reading.aspx | w3m -dump -T 'text/html' | grep '3-hr PSI  ' | sed "s|3-hr PSI  ||g" | tr "\n" " " | tr -s " " " " | sed "s|-|0|g") )
 for i in 1; do
 areapm25=(${northPMa[$i]} ${southPMa[$i]} ${eastPMa[$i]} ${westPMa[$i]} ${centralPMa[$i]})
 pmmax=${areapm25[0]}
