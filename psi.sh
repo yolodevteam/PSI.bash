@@ -1,5 +1,6 @@
 #!/bin/bash
 ## psi script by zhongfu
+set -x
 ## init
 # load config
 . etc/config/config.sh

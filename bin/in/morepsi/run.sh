@@ -1,5 +1,5 @@
 while true; do
-output=$(phantomjs fetch.js)
+output=$(phantomjs ./bin/in/morepsi/fetch.js)
 echo "hello"
 if [[ -z "$output" ]]; then
 	echo "sleeping"

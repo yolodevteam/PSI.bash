@@ -19,7 +19,7 @@ function getpsi {
 	# get PSI reading for current hour
 	psi=${psiarray[$(date +%k)]}
 }
-
+getpsi
 # check if PSI is updated/11pm's psi still not zero
 while [[ $psi == 0 ]] || [[ $psi == $null ]] || [[ $psi23 != 0 ]]; do
 	sleep 30
