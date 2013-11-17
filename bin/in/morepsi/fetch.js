@@ -3,13 +3,12 @@ var page = require('webpage').create();
 var system = require('system');
 var url = 'http://app2.nea.gov.sg/anti-pollution-radiation-protection/air-pollution-control/psi/pollutant-concentrations';
 
-
 function exit() {
     phantom.exit();
 }
-
 page.onConsoleMessage = function(msg) {
-  system.stderr.writeLine(msg);
+//    fs.write("/dev/stdout", msg, "w");
+	system.stdout.writeLine(msg);
 };
 
 
@@ -24,7 +23,7 @@ page.open(url, function (status) {
     //page.includeJs('http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js', function () {
     page.injectJs('jquery.min.js');
     //console.log('injected js');
-
+    var error = 0;
     page.injectJs('table.js');
    // console.log('injected j2');
     page.evaluate(function() {
@@ -51,6 +50,14 @@ page.open(url, function (status) {
             }
         }
         var date = new Date();
+	var currentHours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
+	//console.log(currentHours + " " + number.substring(0,2));
+	if (currentHours != number.substring(0,2)) {
+		error = 1;
+		return;
+	}
+
+
         var jsonTime = date.getDate() + ":" + date.getMonth() + ":" + number.substring(0, 2);    
         var json = {};
         json[jsonTime] = table;        
@@ -58,10 +65,13 @@ page.open(url, function (status) {
 
 
         //console.log("time " + time);
-        //console.log("swag " + time.attr('value'));
+      	//console.log("swag " + time.attr('value'));
       //  console.log("hello!");
         //exit();
         
     });
+    if (error != 0) {
+   	phantom.exit(1);	
+    }
     phantom.exit();
 });
