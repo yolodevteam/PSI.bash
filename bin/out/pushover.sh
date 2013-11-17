@@ -5,5 +5,6 @@
 # pushover
 for user in ${config_pushover_keys[@]}; do
 	curl --silent --form token="$config_pushover_apikey" --form user="$user" --form message="PSI is now $psi" https://api.pushover.net/1/messages.json > /dev/null
-	echo pushover user $user done
 done
+echo Pushover module finished.
+

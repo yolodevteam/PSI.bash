@@ -29,3 +29,5 @@ while [[ $psi == 0 ]] || [[ $psi == $null ]] || [[ $psi23 != 0 ]]; do
 	fi
 	getpsi # function above
 done
+echo PSI module finished.
+

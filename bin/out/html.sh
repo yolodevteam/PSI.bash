@@ -26,13 +26,14 @@ $(cat etc/pasthtml)
 </body>
 </html>
 EOF
-echo html done
-## make pasthtml
+
+## make past psi record for html
 currentdate=$(date +%d/%m/%Y\ %H:00)
 if [[ $(grep "$currentdate" etc/pasthtml) == $null ]]; then
 	cat << EOF > etc/pasthtml
 		<p><h2>$psi</h2>at $currentdate</p><br>
 $(head -n 9 etc/pasthtml)
 EOF
-	echo pasthtml done
 fi
+
+echo HTML module finished.
