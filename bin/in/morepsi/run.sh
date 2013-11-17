@@ -1,5 +1,5 @@
 while true; do
-output=$(phantomjs ./bin/in/morepsi/fetch.js)
+output=$(phantomjs ./bin/in/morepsi/fetch.js | sed -e "s|{||" -e "s|}]}|}]|")
 echo "hello"
 if [[ -z "$output" ]]; then
 	echo "sleeping"
