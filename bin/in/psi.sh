@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 ## psi module - in/psi.sh
 # PSI reading page
 psi_url="http://www.haze.gov.sg/haze-update/past-24-hour-psi-reading.aspx"

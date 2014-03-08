@@ -3,7 +3,7 @@
 # load config
 . etc/config/html.sh
 # write PSI webpage
-cat << EOF > /var/www/psi/index.html
+cat << EOF > ${config_html_dir}/index.html
 $(cat common/html/head)
 <body>
 	<center>
@@ -11,7 +11,7 @@ $(cat common/html/head)
 		<h1>$psi</h1>
 		<br>
 		<a href="/psi/psi.json">JSON</a>
-		<a href="/psi/all.json">More JSON</a>
+		<a href="/psi/all.json">More JSON</a><br>
 		<br>
 		<a href="mailto:me@zhongfu.li">Contact</a>
 		<hr>

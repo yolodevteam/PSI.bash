@@ -29,7 +29,7 @@ page.open(url, function (status) {
     page.evaluate(function() {
         String.prototype.isNumber = function(){return /^\d+$/.test(this);}
 
-        $('.text_psinormal thead').html('<tr><th align="center"><strong>Region</strong></th><th align="center"><strong>SO2</strong></th><th align="center"><strong>PM10</strong></th><th align="center"><strong>NO2</strong></th><th align="center"><strong>O3</strong></th><th align="center"><strong>CO</strong></th><th align="center"><strong>PM2.5</strong></th></tr>');
+        $('.text_psinormal thread').html('<tr><th align="center"><strong>Region</strong></th><th align="center"><strong>24-h Sulphur dioxide (µg/m<sup>3</sup>)</strong></th><th align="center"><strong>24-h PM10 (µg/m<sup>3</sup>)</strong></th><th align="center"><strong>1-h Nitrogen dioxide (µg/m<sup>3</sup>)<sup>a</sup></strong></th><th align="center"><strong>8-h Ozone (µg/m<sup>3</sup>)</strong></th><th align="center"><strong>8-h Carbon monoxide (mg/m<sup>3</sup>)</strong></th><th align="center"><strong>24-h PM2.5 (µg/m<sup>3</sup>)<sup>b</sup></strong></th></tr>');
         var table = $('.text_psinormal').tableToJSON();
         var number;
         
@@ -56,9 +56,11 @@ page.open(url, function (status) {
 		error = 1;
 		return;
 	}
+	var day = ('0' + date.getDate()).slice(-2);
+	var month = ('0' + (date.getMonth() + 1)).slice(-2);
+	
 
-
-        var jsonTime = date.getDate() + ":" + date.getMonth() + ":" + number.substring(0, 2);    
+        var jsonTime = day + ":" + month + ":" + number.substring(0, 2);    
         var json = {};
         json[jsonTime] = table;        
         console.log(JSON.stringify(json));
@@ -66,7 +68,7 @@ page.open(url, function (status) {
 
         //console.log("time " + time);
       	//console.log("swag " + time.attr('value'));
-      //  console.log("hello!");
+        //console.log("hello!");
         //exit();
         
     });
