@@ -31,7 +31,7 @@ getpsi $hour
 # check if PSI is updated/11pm's psi still not zero
 while [[ $psi == 0 ]] || [[ $psi == $null ]] || [[ $psi00 != 0 ]]; do
 	sleep 30
-	if [[ $(date +%k) != $hour ]]; then # if current hour is different from hour when script was ran
+	if [[ $(date +%k | tr -d " ") != $hour ]]; then # if current hour is different from hour when script was ran
 		echo "Timeout while getting PSI"
 		exit 100 # then die
 	fi

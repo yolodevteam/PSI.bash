@@ -31,7 +31,7 @@ currentdate=$(date +%d/%m/%Y\ %H:00)
 if [[ $(grep "$currentdate" etc/pasthtml) == $null ]]; then
 	cat << EOF > etc/pasthtml
 		<p><h2>$psi</h2>at $currentdate</p><br>
-$(head -n 9 etc/pasthtml)
+$(head -n 23 etc/pasthtml)
 EOF
 fi
 

@@ -4,7 +4,7 @@
 cat << EOF > ${config_html_dir}/psi.json
 {
 $(cat ${config_html_dir}/psi.json | tail -n 24 | sed '$ d'),
-	"$(date +%d:%m:%H)":${psiarray[$hour]}
+	"$(date +%d:%m:%H)":${psiarray[$arrnum]}
 }
 EOF
 cat << EOF > ${config_html_dir}/all.json
