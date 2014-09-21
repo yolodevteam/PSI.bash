@@ -4,6 +4,7 @@ set -x
 ## init
 # load config
 . etc/config/config.sh
+hour=$(date +%k)
 # load modules
 for inmod in $config_main_inmod; do
 	. bin/in/$inmod.sh
