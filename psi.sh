@@ -1,7 +1,7 @@
 #!/bin/bash
 ## psi script by zhongfu
-set -x
 exec 2>&1
+set -x
 ## init
 # load config
 . etc/config/config.sh
