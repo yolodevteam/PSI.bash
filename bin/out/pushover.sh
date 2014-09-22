@@ -3,8 +3,8 @@
 # load config
 . etc/config/pushover.sh
 # pushover
-for user in ${config_pushover_keys[@]}; do
-	curl --silent --form token="$config_pushover_apikey" --form user="$user" --form message="PSI is now $psi" https://api.pushover.net/1/messages.json > /dev/null
+for user in ${config_pushover_userkey[@]}; do
+	curl -s --data "token=$config_pushover_apikey&user=$user&message=PSI is now $psi" https://api.pushover.net/1/messages.json
 done
 echo Pushover module finished.
 
