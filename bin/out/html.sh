@@ -12,7 +12,8 @@ $(cat common/html/head)
 		<br>
 		<a href="/psi/psi.json">JSON</a>
 		<a href="/psi/all.json">More JSON</a><br>
-		<a href="mailto:psi@zhongfu.li">Contact</a>
+		Contact: psi AT zhongfu DOT li<br><br>
+		<b>NEW:</b> <a href="https://pushbullet.com/channel?tag=sgpsi">Pushbullet channel!</a>
 		<hr>
 		<p2>Past readings:</p2>
 $(cat etc/pasthtml)
